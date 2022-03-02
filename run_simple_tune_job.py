@@ -1,5 +1,6 @@
 # From https://docs.ray.io/en/latest/tune/index.html
 
+import ray
 from ray import tune
 
 
@@ -16,7 +17,7 @@ def training_function(config):
         # Feed the score back back to Tune.
         tune.report(mean_loss=intermediate_score)
 
-
+ray.init(address="auto")
 analysis = tune.run(
     training_function,
     config={
