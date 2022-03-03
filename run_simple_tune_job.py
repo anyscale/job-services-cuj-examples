@@ -18,6 +18,7 @@ def training_function(config):
         tune.report(mean_loss=intermediate_score)
 
 ray.init(address="auto")
+print("Starting Ray Tune job")
 analysis = tune.run(
     training_function,
     config={
