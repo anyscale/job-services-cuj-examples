@@ -1,7 +1,6 @@
 from ray import serve
 from fastapi import FastAPI
 
-serve.start(detached=True)
 app = FastAPI()
 
 @serve.deployment(route_prefix="/")
@@ -20,5 +19,8 @@ class App:
     def set_should_fail(self):
         self.should_fail = True
         return "ok"
-App.deploy()
 
+bound = App.bind()
+
+if __name__ == "__main__":
+    serve.run(bound)
