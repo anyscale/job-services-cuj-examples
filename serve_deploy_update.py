@@ -2,7 +2,7 @@ from ray import serve
 from typing import Any, Dict
 
 @serve.deployment(user_config={"response": "Hello world!", "should_fail": False})
-class Updateable:
+class Updatable:
     def __init__(self):
         self._response: str = ""
 
@@ -17,4 +17,4 @@ class Updateable:
     def __call__(self, *args) -> str:
         return self._response
 
-bound = Updateable.bind()
+bound = Updatable.bind()
