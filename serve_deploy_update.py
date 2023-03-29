@@ -39,6 +39,11 @@ class Updatable:
         logger.info(f"Responding with '{self._response}'.")
         return PlainTextResponse(self._response)
 
+    @app.get("/healthcheck")
+    def respond(self) -> PlainTextResponse:
+        logger.info(f"Responding with '{self._response}'.")
+        return PlainTextResponse(self._response)
+
     @app.post("/kill-head-node")
     async def kill(self) -> PlainTextResponse:
         logger.info(f"Killing head node.")
