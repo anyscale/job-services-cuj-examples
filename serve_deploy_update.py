@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import subprocess
+import time
 from typing import Any, Dict
 
 from fastapi import FastAPI
@@ -15,6 +16,10 @@ logger = logging.getLogger("ray.serve")
 
 @ray.remote(num_gpus=1)
 def stop_ray_on_head_node():
+    # Provide a grace period so the response can be returned.
+    print("Killing head node in 5...")
+    time.sleep(5)
+    print("Killing head node!")
     return subprocess.check_output("ray stop -f", shell=True)
 
 
@@ -46,8 +51,12 @@ class Updatable:
 
     @app.post("/kill-head-node")
     async def kill(self) -> PlainTextResponse:
+        if ray.available_resources().get("GPU", 0) < 1:
+            msg = "Insufficient GPU resources for stop_ray_on_head_node task."
+            logger.error(msg)
+            return PlainTextResponse(msg, status_code=500)
         logger.info(f"Killing head node.")
-        await stop_ray_on_head_node.remote()
+        stop_ray_on_head_node.remote()
         return PlainTextResponse("ok")
 
 bound = Updatable.bind()
