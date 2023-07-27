@@ -1,7 +1,7 @@
 import time
 import ray
 
-@ray.remote(num_cpus=4)
+@ray.remote(num_cpus=16)
 def foo():
   count = 1
   while count < 10:
