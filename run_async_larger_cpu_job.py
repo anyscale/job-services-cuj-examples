@@ -4,7 +4,7 @@ import time
 import random
 
 # We set num_cpus to zero because this actor will mostly just block on I/O.
-@ray.remote(num_cpus=16)
+@ray.remote(num_cpus=4)
 class SignalActor:
     def __init__(self):
         self.ready_event = asyncio.Event()
